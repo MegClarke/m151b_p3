@@ -38,7 +38,20 @@ public:
 
     void update_operands(const CommonDataBus::data_t& data) {
       // update operands if this RS entry is waiting for them
-      // TODO:
+      // TODO: done
+      // register operands track dependencies via rob_index, not rs_index (so whats the point of rs_index?)
+      // should be passing CommonDataBus.data() because it's taking in the data struct
+
+      if (!valid) return; //dont want to update invalid entry_t
+
+      if (rs1_index != -1 && data.rob_index == rs1_index) {
+        rs1_index = -1;     //rs1 is ready
+        rs1_data = data.result;
+      }
+      if (rs2_index != -1 && data.rob_index == rs2_index) {
+        rs2_index = -1;     //rs2 is ready
+        rs2_data = data.result;
+      }
     }
   };
 
@@ -48,7 +61,10 @@ public:
 
   bool operands_ready(uint32_t index) const {
     // are all operands ready?
-    // TODO:
+    // TODO: done
+    // difference with other function is this one accesses the entry by index and checks validity 
+    if (index >= store_.size()) return false;  // Prevent out-of-bounds access
+    return store_[index].valid && store_[index].operands_ready();
   }
 
   const entry_t& get_entry(uint32_t index) const {
