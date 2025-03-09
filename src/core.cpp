@@ -31,11 +31,13 @@ Core::Core(const SimContext& ctx, uint32_t core_id, ProcessorImpl* processor)
     , decode_queue_(FiFoReg<id_data_t>::Create("idq"))
     , issue_queue_(FiFoReg<is_data_t>::Create("isq"))
     , fetch_stalled_(ValReg<bool>::Create("fetch_stalled", false))
-    , ROB_(/*TODO: use size info from config.h*/)
-    , RAT_(/*TODO: use size info from config.h*/)
-    , RS_(/*TODO: use size info from config.h*/)
-    , RST_(/*TODO: use size info from config.h*/)
-    , FUs_(/*TODO: use size info from config.h*/)
+    //TODO: done
+    , ROB_(ROB_SIZE)
+    , RAT_(NUM_REGS) //one entry per register
+    , RS_(NUM_RSS) //unsure
+    , RST_(NUM_REGS) //tracks all registers
+    , FUs_(NUM_FUS)
+    //end TODO
 {
   // create functional units
   FUs_.at((int)FUType::ALU) = std::make_shared<ALU>(this);
