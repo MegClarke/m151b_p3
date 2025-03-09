@@ -50,8 +50,11 @@ void ReorderBuffer::update(const CommonDataBus::data_t& data) {
   assert(entry.valid);
   assert(!entry.ready);
 
-  // Udate the ROB entry
-  // TODO:
+  // Update the ROB entry
+  // TODO: done
+  entry.result = data.result;
+  entry.ready = true;
+  // TODO end
 
   if (entry.instr->getExeFlags().use_rd) {
     DT(2, "Writeback: value=0x" << std::hex << data.result << std::dec << ", " << *entry.instr);
