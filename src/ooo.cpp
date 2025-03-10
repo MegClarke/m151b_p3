@@ -272,7 +272,7 @@ void Core::commit() {
     }
 
     // pop ROB entry
-    // TODO: DONE
+    // TODO:
     ROB_.pop();
 
     DT(2, "Commit: " << *instr);
