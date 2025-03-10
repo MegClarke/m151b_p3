@@ -39,16 +39,14 @@ public:
     void update_operands(const CommonDataBus::data_t& data) {
       // update operands if this RS entry is waiting for them
       // TODO: done
-      // register operands track dependencies via rob_index, not rs_index (so whats the point of rs_index?)
-      // should be passing CommonDataBus.data() because it's taking in the data struct
 
       if (!valid) return; //dont want to update invalid entry_t
 
-      if (rs1_index != -1 && data.rob_index == rs1_index) {
+      if (rs1_index != -1 && rs1_index == data.rs_index) {
         rs1_index = -1;     //rs1 is ready
         rs1_data = data.result;
       }
-      if (rs2_index != -1 && data.rob_index == rs2_index) {
+      if (rs2_index != -1 && rs2_index == data.rs_index) {
         rs2_index = -1;     //rs2 is ready
         rs2_data = data.result;
       }

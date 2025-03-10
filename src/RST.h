@@ -27,35 +27,35 @@ namespace tinyrv {
 // I'm not sure if this is completely right, there wasn't a lot of guidance for this file. 
 class RegisterStatusTable {
 public:
-    //initialize to -1 (meaning not waiting for ROB result)
+    //initialize to -1 (meaning not waiting for rs result)
     RegisterStatusTable(uint32_t num_registers) : table_(num_registers, -1) {}
 
-    // Set the ROB index for an architectural register
-    void set(int arch_reg, int rob_index) {
+    // Set the rs index for an architectural register
+    void set(int arch_reg, int rs_index) {
         assert(arch_reg >= 0 && static_cast<size_t>(arch_reg) < table_.size()); //index within bounds
-        table_[arch_reg] = rob_index;
+        table_[arch_reg] = rs_index;
     }
 
-    // Get the ROB index for an architectural register
+    // Get the rs index for an architectural register
     int get(int arch_reg) const {
         assert(arch_reg >= 0 && static_cast<size_t>(arch_reg) < table_.size()); //index within bounds
         return table_[arch_reg];
     }
 
-    // Clear the ROB index when the instruction commits
+    // Clear the rs index when the instruction commits
     void clear(int arch_reg) {
         assert(arch_reg >= 0 && static_cast<size_t>(arch_reg) < table_.size()); //index within bounds
-        table_[arch_reg] = -1; //no longer waiting for ROB result
+        table_[arch_reg] = -1; //no longer waiting for rs result
     }
 
-    // Check if a register is waiting on the ROB
+    // Check if a register is waiting on the rs
     bool exists(int arch_reg) const {
         assert(arch_reg >= 0 && static_cast<size_t>(arch_reg) < table_.size());
         return table_[arch_reg] != -1;
     }
 
     private:
-    std::vector<int> table_;  // Maps architectural registers → ROB index (-1 means no mapping)
+    std::vector<int> table_;  // Maps architectural registers → rs index (-1 means no mapping)
 };
 
 }
