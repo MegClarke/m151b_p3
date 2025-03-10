@@ -125,15 +125,15 @@ void Core::issue() {
 
   // issue the instruction to free reservation station
   // TODO: DONE
-  auto& rs_entry = RS_.get_entry(free_rs_index);
-  rs_entry.valid = true;
-  rs_entry.instr = instr;
-  rs_entry.rob_index = rob_index;
-  rs_entry.rs1_index = (exe_flags.use_rs1 && rs1_rsid != -1) ? rs1_rsid : -1;
-  rs_entry.rs2_index = (exe_flags.use_rs2 && rs2_rsid != -1) ? rs2_rsid : -1;
-  rs_entry.rs1_data = rs1_data;
-  rs_entry.rs2_data = rs2_data;
-  rs_entry.running = false;
+  int rs_index = RS_.issue(
+    rob_index,
+    (exe_flags.use_rs1 && rs1_rsid != -1) ? rs1_rsid : -1,
+    (exe_flags.use_rs2 && rs2_rsid != -1) ? rs2_rsid : -1,
+    rs1_data,
+    rs2_data,
+    instr
+  );
+
 
 
   // update RST mapping
@@ -141,7 +141,7 @@ void Core::issue() {
   if (exe_flags.use_rd) // unsure if RST_ mapping should be updated within conditional or just regardless because it says update RST mapping but doesn't specicify to check if instruction writes to register file
   {
     int rd = instr->getRd();
-    RST_.set(rd, rob_index);
+    RST_.set(rd, rs_index);
   }
 
 
@@ -222,7 +222,7 @@ void Core::writeback() {
     auto& entry = RS_.get_entry(rs_index);
     if (entry.valid && entry.rob_index == cdb_data.rob_index) 
     {
-      entry.valid = false;
+      RS_.release(rs_index);
       int rd = entry.instr->getRd();
       if (RST_.exists(rd) && RST_.get(rd) == cdb_data.rob_index){
         RST_.clear(rd);
