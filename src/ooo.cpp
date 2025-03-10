@@ -227,7 +227,7 @@ void Core::writeback() {
     {
       RS_.release(rs_index);
       int rd = entry.instr->getRd();
-      if (RST_.exists(rd) && RST_.get(rd) == cdb_data.rob_index){
+      if (RST_.exists(rd) && RST_.get(rd) == rs_index){
         RST_.clear(rd);
       }
       break;
