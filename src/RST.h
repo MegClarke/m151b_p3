@@ -19,12 +19,13 @@ namespace tinyrv {
 // this is start of the given code
 // register status table
 // track the mapping from ROB index to RS index
-//typedef std::vector<int> RegisterStatusTable;
+typedef std::vector<int> RegisterStatusTable;
 
-//}
+}
 //end of given code
 
 // I'm not sure if this is completely right, there wasn't a lot of guidance for this file. 
+// when ROB commits, find RS index and clear RS entry
 class RegisterStatusTable {
 public:
     //initialize to -1 (meaning not waiting for ROB result)
