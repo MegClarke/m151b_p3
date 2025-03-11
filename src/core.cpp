@@ -35,7 +35,7 @@ Core::Core(const SimContext& ctx, uint32_t core_id, ProcessorImpl* processor)
     , ROB_(ROB_SIZE)
     , RAT_(NUM_REGS) //one entry per register
     , RS_(NUM_RSS) //unsure
-    , RST_(NUM_REGS) //tracks all registers
+    , RST_(ROB_SIZE) 
     , FUs_(NUM_FUS)
     //end TODO
 {

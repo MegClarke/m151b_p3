@@ -16,47 +16,46 @@
 
 namespace tinyrv {
 
-// this is start of the given code
 // register status table
 // track the mapping from ROB index to RS index
 typedef std::vector<int> RegisterStatusTable;
 
 }
 //end of given code
-
-// I'm not sure if this is completely right, there wasn't a lot of guidance for this file. 
 // when ROB commits, find RS index and clear RS entry
-class RegisterStatusTable {
-public:
-    //initialize to -1 (meaning not waiting for ROB result)
-    RegisterStatusTable(uint32_t num_registers) : table_(num_registers, -1) {}
+// index of RST = index of ROB so RST[ROB] = RS index
 
-    // Set the ROB index for an architectural register
-    void set(int arch_reg, int rob_index) {
-        assert(arch_reg >= 0 && static_cast<size_t>(arch_reg) < table_.size()); //index within bounds
-        table_[arch_reg] = rob_index;
-    }
+// class RegisterStatusTable {
+// public:
+//     //initialize to -1 (meaning not waiting for ROB result)
+//     RegisterStatusTable(uint32_t num_registers) : table_(num_registers, -1) {}
 
-    // Get the ROB index for an architectural register
-    int get(int arch_reg) const {
-        assert(arch_reg >= 0 && static_cast<size_t>(arch_reg) < table_.size()); //index within bounds
-        return table_[arch_reg];
-    }
+//     // Set the ROB index for an architectural register
+//     void set(int arch_reg, int rob_index) {
+//         assert(arch_reg >= 0 && static_cast<size_t>(arch_reg) < table_.size()); //index within bounds
+//         table_[arch_reg] = rob_index;
+//     }
 
-    // Clear the ROB index when the instruction commits
-    void clear(int arch_reg) {
-        assert(arch_reg >= 0 && static_cast<size_t>(arch_reg) < table_.size()); //index within bounds
-        table_[arch_reg] = -1; //no longer waiting for ROB result
-    }
+//     // Get the ROB index for an architectural register
+//     int get(int arch_reg) const {
+//         assert(arch_reg >= 0 && static_cast<size_t>(arch_reg) < table_.size()); //index within bounds
+//         return table_[arch_reg];
+//     }
 
-    // Check if a register is waiting on the ROB
-    bool exists(int arch_reg) const {
-        assert(arch_reg >= 0 && static_cast<size_t>(arch_reg) < table_.size());
-        return table_[arch_reg] != -1;
-    }
+//     // Clear the ROB index when the instruction commits
+//     void clear(int arch_reg) {
+//         assert(arch_reg >= 0 && static_cast<size_t>(arch_reg) < table_.size()); //index within bounds
+//         table_[arch_reg] = -1; //no longer waiting for ROB result
+//     }
 
-    private:
-    std::vector<int> table_;  // Maps architectural registers → ROB index (-1 means no mapping)
-};
+//     // Check if a register is waiting on the ROB
+//     bool exists(int arch_reg) const {
+//         assert(arch_reg >= 0 && static_cast<size_t>(arch_reg) < table_.size());
+//         return table_[arch_reg] != -1;
+//     }
 
-}
+//     private:
+//     std::vector<int> table_;  // Maps architectural registers → ROB index (-1 means no mapping)
+// };
+
+// }

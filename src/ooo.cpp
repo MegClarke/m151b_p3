@@ -137,11 +137,9 @@ void Core::issue() {
 
 
   // update RST mapping
-  // TODO: DONE???????
-  if (exe_flags.use_rd) // unsure if RST_ mapping should be updated within conditional or just regardless because it says update RST mapping but doesn't specicify to check if instruction writes to register file
-  {
-    int rd = instr->getRd();
-    RST_.set(rd, rs_index);
+  // TODO: updated for new implementation of RST
+  if (exe_flags.use_rd) {  
+    RST_[rob_index] = rs_index;
   }
 
 
@@ -216,20 +214,15 @@ void Core::writeback() {
 
   // free the RS entry associated with this CDB response
   // so that it can be used by other instructions
-  // TODO: DONE
-  for (int rs_index = 0; rs_index < (int)RS_.size(); rs_index++)
-  {
-    auto& entry = RS_.get_entry(rs_index);
-    if (entry.valid && entry.rob_index == cdb_data.rob_index) 
-    {
-      RS_.release(rs_index);
-      int rd = entry.instr->getRd();
-      if (RST_.exists(rd) && RST_.get(rd) == cdb_data.rob_index){
-        RST_.clear(rd);
-      }
-      break;
-    }
+  // TODO: DONE (updated)
+  int rs_index = RST_[cdb_data.rob_index];
+  if (rs_index != -1) {
+    RS_.release(rs_index);
+    // Clear the mapping to indicate that the RS entry is no longer allocated.
+    RST_[cdb_data.rob_index] = -1;
   }
+  //removed the loop that iterated through reservation stations
+
 
   // update ROB
   // TODO: DONE
