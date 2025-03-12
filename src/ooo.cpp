@@ -188,8 +188,11 @@ void Core::execute() {
       FUType fu_type = entry.instr->getFUType();
       auto fu = FUs_.at((int)fu_type);
 
-      fu->issue(entry.instr, entry.rob_index, rs_index, entry.rs1_data, entry.rs2_data);
-      entry.running = true;
+      if (!fu->busy())
+      {
+        fu->issue(entry.instr, entry.rob_index, rs_index, entry.rs1_data, entry.rs2_data);
+        entry.running = true;
+      }
     }
   }
 }
